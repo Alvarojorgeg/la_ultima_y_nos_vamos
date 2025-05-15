@@ -47,7 +47,7 @@ class EncuestaRepository:
             "votos": encuesta.votos,
             "estado": encuesta.estado,
             "timestamp_inicio": encuesta.timestamp_inicio.isoformat(),
-            "duracion": encuesta.duracion.total_seconds()
+            "duracion": encuesta.duracion
         }
 
     def _from_dict(self, data: dict) -> Encuesta:
