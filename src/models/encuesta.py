@@ -8,11 +8,10 @@ class Encuesta:
         self.opciones = opciones
         self.duracion = datetime.timedelta(seconds=duracion_segundos)
         self.creacion = datetime.datetime.now()
-        self.timestamp_inicio = self.creacion  # <-- AÑADIDO AQUÍ
+        self.timestamp_inicio = self.creacion
         self.votos = {}  # username -> lista de opciones
         self.cerrada = False
-        self.tipo = tipo  # puede ser "simple" o "multiple"
-
+        self.tipo = tipo  # "simple" o "multiple"
 
     def esta_activa(self):
         return not self.cerrada and datetime.datetime.now() < self.creacion + self.duracion
@@ -52,8 +51,9 @@ class Encuesta:
             "id": self.id,
             "pregunta": self.pregunta,
             "opciones": self.opciones,
-            "duracion": self.duracion.total_seconds(),
+            "duracion": int(self.duracion.total_seconds()),  # 💡 CONVERTIDO A INT
             "creacion": self.creacion.isoformat(),
+            "timestamp_inicio": self.timestamp_inicio.isoformat(),
             "votos": self.votos,
             "cerrada": self.cerrada,
             "tipo": self.tipo
@@ -62,15 +62,22 @@ class Encuesta:
     @classmethod
     def from_dict(cls, d):
         encuesta = cls(
-            d["pregunta"],
-            d["opciones"],
+            d.get("pregunta", ""),
+            d.get("opciones", []),
             int(d.get("duracion", 60)),
             d.get("tipo", "simple")
         )
-        encuesta.id = d["id"]
-        encuesta.creacion = datetime.datetime.fromisoformat(d["creacion"])
+        encuesta.id = d.get("id", str(uuid.uuid4()))
+        try:
+            encuesta.creacion = datetime.datetime.fromisoformat(d["creacion"])
+        except KeyError:
+            encuesta.creacion = datetime.datetime.now()
+
+        try:
+            encuesta.timestamp_inicio = datetime.datetime.fromisoformat(d["timestamp_inicio"])
+        except KeyError:
+            encuesta.timestamp_inicio = encuesta.creacion
+
         encuesta.votos = d.get("votos", {})
         encuesta.cerrada = d.get("cerrada", False)
-        encuesta.timestamp_inicio = datetime.datetime.fromisoformat(d.get("timestamp_inicio", d["creacion"]))
-
         return encuesta

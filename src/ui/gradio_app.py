@@ -1,51 +1,50 @@
-# src/ui/gradio_app.py
-
 import gradio as gr
 from src.services.poll_service import PollService
-from src.services.chatbot_service import ChatbotService
 from src.services.nft_service import NFTService
+from src.repositories.encuesta_repo import EncuestaRepository
+from src.repositories.nft_repo import NFTRepository
+from src.repositories.usuario_repo import UsuarioRepository
 
+# Instanciar repositorios
+encuesta_repo = EncuestaRepository()
+nft_repo = NFTRepository()
+user_repo = UsuarioRepository()
 
-class UIController:
-    def __init__(self, poll_service: PollService, chatbot_service: ChatbotService, nft_service: NFTService):
-        self.poll_service = poll_service
-        self.chatbot_service = chatbot_service
-        self.nft_service = nft_service
+# Instanciar servicios
+nft_service = NFTService(nft_repo, user_repo)
+poll_service = PollService(encuesta_repo, nft_service)
 
-    def interfaz(self):
-        with gr.Blocks() as demo:
-            gr.Markdown("# 🎥 Encuestas Interactivas del Stream")
+# Funciones para la interfaz Gradio
+def crear_encuesta(pregunta, opciones, duracion):
+    opciones_list = [op.strip() for op in opciones.split(",")]
+    encuesta = poll_service.crear_encuesta(pregunta, opciones_list, int(duracion))
+    return f"Encuesta creada con ID: {encuesta.id}"
 
-            with gr.Tab("📊 Votación"):
-                encuesta_id_input = gr.Text(label="ID de la encuesta")
-                username_input = gr.Text(label="Tu nombre de usuario")
-                opcion_input = gr.Text(label="Opción a votar (texto exacto)")
-                votar_btn = gr.Button("Votar")
-                voto_output = gr.Textbox(label="Resultado del voto")
+def votar(poll_id, username, opcion):
+    try:
+        poll_service.votar(poll_id, username, [opcion])
+        return "Voto registrado correctamente"
+    except Exception as e:
+        return f"Error: {str(e)}"
 
-                def votar_web(poll_id, username, opcion):
-                    try:
-                        self.poll_service.votar(poll_id, username, [opcion])
-                        return "✅ Voto registrado"
-                    except Exception as e:
-                        return f"❌ {str(e)}"
+# Interfaz con Gradio
+with gr.Blocks() as demo:
+    gr.Markdown("## Crear Encuesta")
+    pregunta = gr.Textbox(label="Pregunta")
+    opciones = gr.Textbox(label="Opciones (separadas por coma)")
+    duracion = gr.Number(label="Duración (segundos)", value=60)
+    crear_btn = gr.Button("Crear encuesta")
+    crear_output = gr.Textbox(label="Resultado")
+    crear_btn.click(fn=crear_encuesta, inputs=[pregunta, opciones, duracion], outputs=crear_output)
 
-                votar_btn.click(votar_web, inputs=[encuesta_id_input, username_input, opcion_input], outputs=voto_output)
+    gr.Markdown("## Votar en Encuesta")
+    poll_id = gr.Textbox(label="ID de la encuesta")
+    username = gr.Textbox(label="Usuario")
+    opcion = gr.Textbox(label="Opción")
+    votar_btn = gr.Button("Votar")
+    votar_output = gr.Textbox(label="Resultado")
+    votar_btn.click(fn=votar, inputs=[poll_id, username, opcion], outputs=votar_output)
 
-            with gr.Tab("🤖 Chatbot"):
-                chat = gr.ChatInterface(fn=self.chatbot_service.responder)
-
-            with gr.Tab("🎟️ Mis Tokens"):
-                user_token_input = gr.Text(label="Tu usuario")
-                mostrar_btn = gr.Button("Mostrar mis tokens")
-                tokens_output = gr.Textbox(label="Tokens")
-
-                def ver_tokens(username):
-                    tokens = self.nft_service.obtener_tokens_usuario(username)
-                    if not tokens:
-                        return "📭 No tienes tokens"
-                    return "\n".join([f"{t.token_id}: {t.option} ({t.poll_id})" for t in tokens])
-
-                mostrar_btn.click(ver_tokens, inputs=[user_token_input], outputs=tokens_output)
-
-        return demo
+# Lanzar app
+if __name__ == "__main__":
+    demo.launch()

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "ae7997a5-4579-42e8-b1a4-e0feb79bd57b",
+    "pregunta": "",
+    "opciones": [
+      ""
+    ],
+    "tipo": "simple",
+    "votos": {},
+    "timestamp_inicio": "2025-05-15T19:46:40.940309",
+    "duracion": 60.0
+  },
+  {
+    "id": "3082b73e-e538-4fbb-a325-3b4307575773",
+    "pregunta": "reewre",
+    "opciones": [
+      "rewr",
+      "hf",
+      "hg"
+    ],
+    "tipo": "simple",
+    "votos": {
+      "sfdss": [
+        "rewr"
+      ]
+    },
+    "timestamp_inicio": "2025-05-15T19:56:18.201733",
+    "duracion": 60.0
+  },
+  {
+    "id": "e1a68202-cf2c-4c4f-9c80-4f9039ea3919",
+    "pregunta": "reewre",
+    "opciones": [
+      "rewr",
+      "hf",
+      "hg"
+    ],
+    "tipo": "simple",
+    "votos": {},
+    "timestamp_inicio": "2025-05-15T19:56:56.676138",
+    "duracion": 60.0
+  },
+  {
+    "id": "7275a87b-fa0f-4a4f-bd56-399d414042f9",
+    "pregunta": "reewre",
+    "opciones": [
+      "rewr",
+      "hf",
+      "hg"
+    ],
+    "tipo": "simple",
+    "votos": {},
+    "timestamp_inicio": "2025-05-15T19:56:57.226698",
+    "duracion": 60.0
+  }
+]

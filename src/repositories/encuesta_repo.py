@@ -7,7 +7,6 @@ from src.models.encuesta import Encuesta
 
 RUTA_DATOS = "la_ultima_y_nos_vamos/data/encuestas.json"
 
-
 class EncuestaRepository:
     def __init__(self, ruta_archivo: str = RUTA_DATOS):
         self.ruta_archivo = ruta_archivo
@@ -29,14 +28,13 @@ class EncuestaRepository:
                 return e
         return None
 
-    def listar_todas(self):
-        with open(self.ruta_archivo, "r", encoding="utf-8") as f:
-            contenido = f.read().strip()
-            if not contenido:
-                return []
-            datos = json.loads(contenido)
-            return [Encuesta.from_dict(d) for d in datos]
-
+    def listar_todas(self) -> List[Encuesta]:
+        with open(self.ruta_archivo, "r") as f:
+            try:
+                datos = json.load(f)
+            except json.JSONDecodeError:
+                datos = []
+        return [self._from_dict(d) for d in datos]
 
     def _to_dict(self, encuesta: Encuesta) -> dict:
         return {
@@ -45,9 +43,8 @@ class EncuestaRepository:
             "opciones": encuesta.opciones,
             "tipo": encuesta.tipo,
             "votos": encuesta.votos,
-            "estado": encuesta.estado,
             "timestamp_inicio": encuesta.timestamp_inicio.isoformat(),
-            "duracion": encuesta.duracion
+            "duracion": encuesta.duracion.total_seconds()
         }
 
     def _from_dict(self, data: dict) -> Encuesta:
@@ -60,7 +57,6 @@ class EncuestaRepository:
         )
         encuesta.id = data["id"]
         encuesta.votos = data.get("votos", {})
-        encuesta.estado = data["estado"]
         encuesta.timestamp_inicio = datetime.fromisoformat(data["timestamp_inicio"])
-        encuesta.timestamp_cierre = encuesta.timestamp_inicio + timedelta(seconds=data["duracion"])
+        encuesta.creacion = encuesta.timestamp_inicio
         return encuesta
