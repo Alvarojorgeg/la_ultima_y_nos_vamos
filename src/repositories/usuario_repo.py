@@ -29,7 +29,10 @@ class UsuarioRepository:
                 return u
         return None
 
-    def listar_todos(self) -> List[Usuario]:
-        with open(self.ruta_archivo, "r") as f:
-            datos = json.load(f)
-        return [Usuario.from_dict(d) for d in datos]
+    def listar_todos(self):
+        with open(self.ruta_archivo, "r", encoding="utf-8") as f:
+            contenido = f.read().strip()
+            if not contenido:
+                return []
+            datos = json.loads(contenido)
+            return [Usuario.from_dict(d) for d in datos]

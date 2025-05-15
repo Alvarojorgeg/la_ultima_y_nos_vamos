@@ -29,10 +29,14 @@ class EncuestaRepository:
                 return e
         return None
 
-    def listar_todas(self) -> List[Encuesta]:
-        with open(self.ruta_archivo, "r") as f:
-            datos = json.load(f)
-        return [self._from_dict(d) for d in datos]
+    def listar_todas(self):
+        with open(self.ruta_archivo, "r", encoding="utf-8") as f:
+            contenido = f.read().strip()
+            if not contenido:
+                return []
+            datos = json.loads(contenido)
+            return [Encuesta.from_dict(d) for d in datos]
+
 
     def _to_dict(self, encuesta: Encuesta) -> dict:
         return {
