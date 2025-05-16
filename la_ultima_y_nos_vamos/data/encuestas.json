@@ -52,5 +52,48 @@
     "votos": {},
     "timestamp_inicio": "2025-05-15T19:56:57.226698",
     "duracion": 60.0
+  },
+  {
+    "id": "1ef1f245-137e-4d2c-a5b8-c63425c66266",
+    "pregunta": "vfeww",
+    "opciones": [
+      "tre",
+      "tree",
+      "tretre",
+      "ter"
+    ],
+    "tipo": "simple",
+    "votos": {},
+    "timestamp_inicio": "2025-05-16T09:11:51.799114",
+    "duracion": 60.0
+  },
+  {
+    "id": "f919a780-215d-4038-8118-d927d1d2d16c",
+    "pregunta": "vfeww",
+    "opciones": [
+      "tre",
+      "tree",
+      "tretre",
+      "ter"
+    ],
+    "tipo": "simple",
+    "votos": {},
+    "timestamp_inicio": "2025-05-16T09:11:54.758450",
+    "duracion": 60.0
+  },
+  {
+    "id": "10113fcf-974c-4a0d-bf87-2f4859781da0",
+    "pregunta": "vfeww42",
+    "opciones": [
+      "tre",
+      "tree",
+      "tretre",
+      "ter",
+      "3"
+    ],
+    "tipo": "simple",
+    "votos": {},
+    "timestamp_inicio": "2025-05-16T09:11:59.881769",
+    "duracion": 60.0
   }
 ]
