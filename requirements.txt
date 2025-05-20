@@ -2,3 +2,6 @@ gradio
 transformers
 pytest
 bcrypt
+pymongo
+neo4j
+firebase-admin
