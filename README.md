@@ -1,3 +1,5 @@
+https://github.com/Alvarojorgeg/la_ultima_y_nos_vamos
+
 # La Última y Nos Vamos - Plataforma de Votaciones Interactivas
 
 Plataforma interactiva para crear, votar y gestionar encuestas, con emisión de NFTs como comprobantes de voto y un asistente virtual. ¡Incluye integración con bases de datos modernas como Neo4j, MongoDB y Firebase!
